@@ -17,6 +17,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
+          include-prerelease: true
 
       - name: Build with dotnet
         run: dotnet build --configuration Release ./api
@@ -41,12 +42,12 @@ jobs:
 
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: .net-app
       
       - name: Login to Azure
-        uses: azure/login@v2
+        uses: azure/login@v1
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_871C8C931EF64C148D804D91D656A796 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_EE966ED6FEFD4A46A0B37B133DE2C6FA }}
@@ -54,7 +55,7 @@ jobs:
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@v2
         with:
           app-name: 'student-management-util'
           slot-name: 'Production'
