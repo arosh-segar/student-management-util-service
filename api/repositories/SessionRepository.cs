@@ -50,11 +50,21 @@ namespace api.repositories
             return await _context.Session.Where(s => s.Id == id && s.UserEmail.ToUpper().Equals(userEmail.ToUpper())).FirstOrDefaultAsync();
         }
 
-        public async Task<List<Session>> GetSessionsByPeriodAndSubject(DateTime startDate, DateTime endDate, int subjectId, string userEmail)
+        public async Task<List<Session>> GetSessionsByPeriodAndSubject(DateTime startDate, DateTime endDate, int? subjectId, string userEmail)
         {
-            return await _context.Session.Include(s => s.Subject) // Include the Subject entity
-                .Where(s => s.UserEmail.ToUpper() == userEmail.ToUpper() && s.CreatedDate >= startDate && s.CreatedDate <= endDate && s.SubjectId == subjectId)
-                .ToListAsync();
+            if (subjectId != null)
+            {
+                return await _context.Session.Include(s => s.Subject) // Include the Subject entity
+                               .Where(s => s.UserEmail.ToUpper() == userEmail.ToUpper() && s.CreatedDate >= startDate && s.CreatedDate <= endDate && s.SubjectId == subjectId)
+                               .ToListAsync();
+            }
+            else
+            {
+                return await _context.Session.Include(s => s.Subject) // Include the Subject entity
+                               .Where(s => s.UserEmail.ToUpper() == userEmail.ToUpper() && s.CreatedDate >= startDate && s.CreatedDate <= endDate)
+                               .ToListAsync();
+            }
+
         }
 
         public async Task<List<Session>> GetSessionsBySubjectId(int subjectId, string userEmail)

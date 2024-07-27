@@ -12,13 +12,11 @@ namespace api.controllers
     {
         private readonly ISessionRepository _sessionRepository;
         private readonly IBreakRepository _breakRepository;
-        private readonly ISubjectRepository _subjectRepository;
 
         public ReportController(ISessionRepository sessionRepository, IBreakRepository breakRepository, ISubjectRepository subjectRepository)
         {
             _sessionRepository = sessionRepository;
             _breakRepository = breakRepository;
-            _subjectRepository = subjectRepository;
         }
 
         [HttpGet]
@@ -39,7 +37,6 @@ namespace api.controllers
 
             var sessions = await _sessionRepository.GetSessionsByPeriodAndSubject(report.StartDate, report.EndDate, report.subjectId, email);
             var breaks = await _breakRepository.GetBreaksByPeriod(report.StartDate, report.EndDate, email);
-            var subjects = await _subjectRepository.GetAllByUserEmailAsync(email);
 
             // Aggregate sessions by date and subject, and sum the durations
             var aggregatedSessions = sessions

@@ -13,6 +13,6 @@ namespace api.dto.report
         public DateTime EndDate { get; set; }
 
         [Required(ErrorMessage = "Subject ID is required")]
-        public int subjectId { get; set; }
+        public int? subjectId { get; set; }
     }
 }
