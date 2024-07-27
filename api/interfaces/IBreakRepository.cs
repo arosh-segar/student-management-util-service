@@ -14,5 +14,7 @@ namespace api.interfaces
         Task<Break?> UpdateAsync(int id, UpdateBreakRequestDto updateBreakRequestDto, string userEmail);
 
         Task<Break?> DeleteAsync(int id, string userEmail);
+
+        Task<List<Break>> GetBreaksByPeriod(DateTime startDate, DateTime endDate, string userEmail);
     }
 }

@@ -39,10 +39,18 @@ namespace api.repositories
 
         public async Task<List<Break>> GetAllByUserEmailAsync(string userEmail)
         {
-            var sessions = await _context.Break.Where(s => s.UserEmail.ToUpper().Equals(userEmail.ToUpper())).ToListAsync();
+            var breaks = await _context.Break.Where(s => s.UserEmail.ToUpper().Equals(userEmail.ToUpper())).ToListAsync();
 
-            return sessions;
+            return breaks;
         }
+
+        public async Task<List<Break>> GetBreaksByPeriod(DateTime startDate, DateTime endDate, string userEmail)
+        {
+            var breaks = await _context.Break.Where(s => s.UserEmail.ToUpper().Equals(userEmail.ToUpper()) && s.CreatedDate >= startDate && s.CreatedDate <= endDate).ToListAsync();
+
+            return breaks;
+        }
+
 
         public async Task<Break?> GetByIdAsync(int id, string userEmail)
         {

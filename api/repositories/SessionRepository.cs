@@ -50,6 +50,20 @@ namespace api.repositories
             return await _context.Session.Where(s => s.Id == id && s.UserEmail.ToUpper().Equals(userEmail.ToUpper())).FirstOrDefaultAsync();
         }
 
+        public async Task<List<Session>> GetSessionsByPeriodAndSubject(DateTime startDate, DateTime endDate, int subjectId, string userEmail)
+        {
+            return await _context.Session.Include(s => s.Subject) // Include the Subject entity
+                .Where(s => s.UserEmail.ToUpper() == userEmail.ToUpper() && s.CreatedDate >= startDate && s.CreatedDate <= endDate && s.SubjectId == subjectId)
+                .ToListAsync();
+        }
+
+        public async Task<List<Session>> GetSessionsBySubjectId(int subjectId, string userEmail)
+        {
+            return await _context.Session.Include(s => s.Subject) // Include the Subject entity
+                .Where(s => s.UserEmail.ToUpper() == userEmail.ToUpper() && s.SubjectId == subjectId)
+                .ToListAsync();
+        }
+
         public async Task<Session?> UpdateAsync(int id, UpdateSessionRequestDto updateSessionRequestDto, string userEmail)
         {
             var sessionModel = await _context.Session.Where(s => s.Id == id && s.UserEmail.ToUpper().Equals(userEmail.ToUpper())).FirstOrDefaultAsync();
