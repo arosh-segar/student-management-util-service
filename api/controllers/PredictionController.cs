@@ -22,7 +22,7 @@ namespace api.controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> GetPrediction([FromBody] int subjectId)
+        public async Task<IActionResult> GetPrediction([FromBody] PredictionCreateDto predictionCreateDto)
         {
             var claimsIdentity = User.Identity as System.Security.Claims.ClaimsIdentity;
 
@@ -36,10 +36,10 @@ namespace api.controllers
                 Unauthorized("Not Authorized");
             }
 
-            var subject = await _subjectRepository.GetByIdAsync(subjectId, email);
+            var subject = await _subjectRepository.GetByIdAsync(predictionCreateDto.SubjectId, email);
             if (subject == null) return NotFound();
 
-            var sessions = await _sessionRepository.GetSessionsBySubjectId(subjectId, email);
+            var sessions = await _sessionRepository.GetSessionsBySubjectId(predictionCreateDto.SubjectId, email);
 
             var totalStudyMinutes = 0;
 
@@ -95,7 +95,7 @@ namespace api.controllers
                 RequiredDailyStudyMinutes = requiredDailyStudyhours,
                 AverageDailyStudyMinutes = averageDailyStudyMinutes,
                 PredictedKnowledgeLevel = predictedKnowledgeLevel > 100 ? 100 : predictedKnowledgeLevel, // Simplified prediction
-                SelectedSubjectId = subjectId,
+                SelectedSubjectId = predictionCreateDto.SubjectId,
                 IsGenerated = true,
                 ChaptersLeftToCover = remainingChapters
             };
