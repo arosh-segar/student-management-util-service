@@ -19,7 +19,7 @@ namespace api.controllers
             _breakRepository = breakRepository;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Authorize]
         public async Task<IActionResult> GetReports([FromBody] GetReportRequestDto report)
         {

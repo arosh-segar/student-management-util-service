@@ -20,7 +20,7 @@ namespace api.controllers
             _subjectRepository = subjectRepository;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Authorize]
         public async Task<IActionResult> GetPrediction([FromBody] int subjectId)
         {
